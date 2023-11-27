@@ -1,11 +1,16 @@
 // The basic green platform. other platforms extend this one
 
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 
-public class Platform {
-    static final int platformWidth = 300;
-    static final int platformHeight = 100;
+public class Platform extends Rectangle {
+    //static final int platformWidth = 200;
+    //static final int platformHeight = 100;
+    private Image platformImage;
+
+
 
 
 
@@ -18,27 +23,24 @@ public class Platform {
     Rectangle rectangle;
 
     public Platform(double x, double y){
+        platformImage = new Image("/assets/greenPlatform.png");
+        this.setFill(new ImagePattern(platformImage));
         this.x = x;
         this.y = y;
         color = Color.GREEN;
-        rectangle = new Rectangle(x, y, platformWidth, platformHeight);
-        rectangle.setArcHeight(20);
-        rectangle.setArcWidth(20);
-        
-
+        this.setX(x);
+        this.setY(y);
+        this.setWidth(platformImage.getWidth());
+        this.setHeight(platformImage.getHeight());
     }
 
     // returns the velocity to give the character when jumped on
     public int getJumpVelocity(){
-        return 100;
+        return -15;
     }
 
     // the action to complete when jumped on
     public void jumpedOn(){
 
     } 
-
-    public Rectangle getRectangle(){
-        return rectangle;
-    }
 } 

@@ -9,7 +9,7 @@
             "name": "Current File",
             "request": "launch",
             "mainClass": "${file}",
-            "vmArgs": "--module-path C:\\CodeIG\\SchoolWork\\3331\\javafx-sdk-20.0.2\\lib --add-modules=javafx.controls"
+            "vmArgs": "--module-path C:\\CodeIG\\SchoolWork\\3331\\javafx-sdk-20.0.2\\lib --add-modules=javafx.controls -Dglass.win.uiScale=100%"
         },
         {
             "type": "java",
@@ -17,7 +17,7 @@
             "request": "launch",
             "mainClass": "App",
             "projectName": "DoodleJumpClone_67ce7235",
-            "vmArgs": "--module-path C:\\CodeIG\\SchoolWork\\3331\\javafx-sdk-20.0.2\\lib --add-modules=javafx.controls"
+            "vmArgs": "--module-path C:\\CodeIG\\SchoolWork\\3331\\javafx-sdk-20.0.2\\lib --add-modules=javafx.controls -Dglass.win.uiScale=100%"
         }
     ]
 }
