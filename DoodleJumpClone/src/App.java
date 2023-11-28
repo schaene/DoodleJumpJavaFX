@@ -1,6 +1,7 @@
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
@@ -18,6 +19,9 @@ public class App extends Application {
     // Starts the Magic
     @Override
     public void start(Stage primaryStage) throws Exception {
+
+        primaryStage.setTitle("Doodle Jump!");
+        primaryStage.getIcons().add(new Image("/assets/icon.png"));
 
         Label scoreBoard = new Label("Your Score: ");
         scoreBoard.setPrefSize(100, 40);

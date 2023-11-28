@@ -12,15 +12,15 @@ import javafx.util.Duration;
 
 public class GamePane extends Pane{
     // the player
-    Player player;
+    private Player player;
     // an array list of the platforms the player jumps on
-    ArrayList<Platform> platforms = new ArrayList<>();
+    private ArrayList<Platform> platforms = new ArrayList<>();
     // the game timeline for controlling the player
-    Timeline gameUpdaTimeline;
+    private Timeline gameUpdaTimeline;
     // add the controls for the game, used to allow for smoother handling
-    Controls gameControls;
+    private Controls gameControls;
     // add the graphing paper background
-    public Image backgroundImage = new Image("/assets/background.png");
+    private Image backgroundImage = new Image("/assets/background.png");
     // gamePane constructor
     public GamePane(){
         // set the background
@@ -129,7 +129,7 @@ public class GamePane extends Pane{
         System.out.println("generating platforms");
         int numberOfPlatforms = 5 + new Random().nextInt(4);
         for(int i = startingPosition; i < numberOfPlatforms; i++){
-            int newX = new Random().nextInt(((int)this.getScene().getWidth())) - 80;
+            int newX = new Random().nextInt(((int)this.getScene().getWidth())) - GameConstants.PlatformWidth;
             if(newX < 0){
                 newX = 0;
             }
