@@ -85,20 +85,27 @@ public class GamePane extends Pane{
 
     }
 
-    // initialize the game by setting the player to controllable
+    // initialize the game by setting the player to controllable, and creating necessary nodes
     public void initGame(){
+        // clear out the children from whatever was there before (title screen, game over screen, etc)
         this.getChildren().clear();
+        // reset some values
         isGameOver = false;
         score = 0;
+        // make the player and starting platform and add it to the game 
         player = new Player(GameConstants.GameWidth/ 2, 800);
         this.getChildren().add(player);
         //create the starting platform
         platforms.add(new Platform(GameConstants.GameWidth/ 2, 900, true));
+
         // set the players velocity for the initial jump
         player.setYVelocity(-20);
-        init = true;
+
+        //set up game controls
         gameControls = new Controls(this.getScene());
         player.setIsControllable(true);
+
+        // generate a bunch of starting platforms
         generatePlatforms(-10, true);
 
         // add gameover rectangle
@@ -114,6 +121,7 @@ public class GamePane extends Pane{
         playAgainButton.setX(75);
         playAgainButton.setY(GameConstants.GameHeight + 700);
         this.getChildren().add(playAgainButton);
+
         // make the button start game over
         playAgainButton.setOnMouseClicked(e ->{
             this.initGame();
@@ -126,6 +134,9 @@ public class GamePane extends Pane{
         scoreLabel.setScaleY(2);
         this.getChildren().add(scoreLabel);
         scoreLabel.setViewOrder(-3);
+
+        // set init to true
+        init = true;
     }
 
     // game update function. calls the needed functions to make the game a game
@@ -148,7 +159,7 @@ public class GamePane extends Pane{
         else if(isGameOver){
             moveScreen(isGameOver);
         }
-        
+
         // check if new platforms should be generated, and if so, generate them.
         checkIfShouldGeneratePlatforms();
         

@@ -11,6 +11,7 @@ public class Player extends Rectangle{
     // the image of the player
     private Image image;
 
+    // Player constructor
     public Player(double x, double y){
         // intantiates to player
         this.xVelocity = 0;
@@ -25,6 +26,8 @@ public class Player extends Rectangle{
         // make sure it stays in front
         this.setViewOrder(-2);
     }
+
+    // setters
     public void setXVelocity(double xVelocity){
         this.xVelocity = xVelocity;
     }
@@ -36,6 +39,7 @@ public class Player extends Rectangle{
         this.isControllable = isControllable;
     }
 
+    // getters
     public boolean getIsControllable(){
         return isControllable;
     }
@@ -46,6 +50,7 @@ public class Player extends Rectangle{
         return xVelocity;
     }
 
+    // change the player icon from left to right while moving that direction
     public void setFacing(boolean isLeft){
         if(isLeft){
             image = new Image("/assets/playerLeft.png");
@@ -56,6 +61,7 @@ public class Player extends Rectangle{
         this.setFill(new ImagePattern(image));
     }
 
+    // move the player according to the velocity, and allow rollover from the sides
     public void velocityDo(){
         this.setX(getX() + xVelocity);
         this.setY(getY() + yVelocity);
