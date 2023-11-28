@@ -5,12 +5,13 @@ import java.util.Random;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 public class GamePane extends Pane{
@@ -24,8 +25,15 @@ public class GamePane extends Pane{
     private Controls gameControls;
     // add the graphing paper background
     private Image backgroundImage = new Image("/assets/background.png");
-    // stores if the game was init
+    // add stuff for game over screen
+    Rectangle gameOverRectangle;
+    Rectangle playAgainButton;
+    Text scoreLabel;
+    int score;
+    int highScore;
+    // stores if the game was init or gameover
     private boolean init = false;
+    private boolean isGameOver = false;
 
     // gamePane constructor
     public GamePane(){
@@ -64,7 +72,6 @@ public class GamePane extends Pane{
 
         // add click event on play button to init the game
         playButton.setOnMouseClicked(e -> {
-            this.getChildren().clear();
             this.initGame();
             
         });
@@ -80,6 +87,9 @@ public class GamePane extends Pane{
 
     // initialize the game by setting the player to controllable
     public void initGame(){
+        this.getChildren().clear();
+        isGameOver = false;
+        score = 0;
         player = new Player(GameConstants.GameWidth/ 2, 800);
         this.getChildren().add(player);
         //create the starting platform
@@ -90,6 +100,32 @@ public class GamePane extends Pane{
         gameControls = new Controls(this.getScene());
         player.setIsControllable(true);
         generatePlatforms(-10, true);
+
+        // add gameover rectangle
+        Image gameOverImage = new Image("/assets/race-over.png");
+        gameOverRectangle = new Rectangle(gameOverImage.getWidth() * 2, gameOverImage.getHeight() * 2, new ImagePattern(gameOverImage));
+        gameOverRectangle.setX(75);
+        gameOverRectangle.setY(GameConstants.GameHeight + 400);
+        this.getChildren().add(gameOverRectangle);
+
+        // add playAgainButton rectangle
+        Image playAgainImage = new Image("/assets/play-again.png");
+        playAgainButton = new Rectangle(playAgainImage.getWidth(), playAgainImage.getHeight(), new ImagePattern(playAgainImage));
+        playAgainButton.setX(75);
+        playAgainButton.setY(GameConstants.GameHeight + 700);
+        this.getChildren().add(playAgainButton);
+        // make the button start game over
+        playAgainButton.setOnMouseClicked(e ->{
+            this.initGame();
+        });
+
+        // add score label for game and gameover
+        scoreLabel = new Text(50, -20, "Score: " + score);
+        scoreLabel.setFill(Color.BLACK);
+        scoreLabel.setScaleX(2);
+        scoreLabel.setScaleY(2);
+        this.getChildren().add(scoreLabel);
+        scoreLabel.setViewOrder(-3);
     }
 
     // game update function. calls the needed functions to make the game a game
@@ -104,18 +140,79 @@ public class GamePane extends Pane{
             player.setX(player.getX() + this.getScene().getWidth());
         }
 
-        // move platforms down rather than the player if the player is half way up the screen
+        //only do if init'd. game over will stop these
         if(init){
+            // move platforms down rather than the player if the player is half way up the screen
             moveScreen();
-        }
-        
+            // handles the controls and applies whatever they may be
+            handleControls();
+            //if player is under the map, its game over
+            if(player.getY() + player.getHeight() > GameConstants.GameHeight && !isGameOver){
+                gameOver();
+            }
+        } else if(isGameOver){
+            // move everything off the screen til the "race over" banner is shown
+            if(player.getY() - player.getHeight() < this.getScene().getHeight() && gameOverRectangle.getY() > 100){
+            double offset = (getScene().getHeight()) - player.getY();
+            //if the offset is positive, adjsutment is needed
+            if(offset < 0){
+                //put the player back below the half way line
+                player.setY(player.getY() + offset);
+                gameOverRectangle.setY(gameOverRectangle.getY() + offset);
+                playAgainButton.setY(playAgainButton.getY() + offset);
+                scoreLabel.setY(scoreLabel.getY() + offset);
 
-        // handles the controls and applies whatever they may be
-        handleControls();
+                // move the platforms 
+                for (Platform platform : platforms) {
+                    platform.setY(platform.getY() + offset);
+                }
+            }
+        }
+        }
+
+        checkIfShouldGeneratePlatforms();
         
         // detects collision with platforms and gives the player the velocity for that platform
         playerJump();
 
+        
+    }
+
+    //do if gameover
+    private void gameOver(){
+        scoreLabel = new Text(200, GameConstants.GameHeight + 600, "");
+        scoreLabel.setFill(Color.RED);
+        scoreLabel.setScaleX(5);
+        scoreLabel.setScaleY(5);
+        this.getChildren().add(scoreLabel);
+
+        System.out.println("gameover called");
+        if(score > highScore){
+            highScore = score;
+        }
+        scoreLabel.setText("Score: " + score + "\nHigh Score: " + highScore);
+        isGameOver = true;
+        init = false;
+
+    }
+
+    // moves the platforms if need be
+    private void moveScreen(){
+        if(player.getY() - player.getHeight()/2 < this.getScene().getHeight() / 2){
+            double offset = (getScene().getHeight() / 2) - player.getY();
+            //if the offset is positive, adjsutment is needed
+            if(offset > 0){
+                //put the player back below the half way line
+                player.setY(player.getY() + offset);
+                // move the platforms 
+                for (Platform platform : platforms) {
+                    platform.setY(platform.getY() + offset);
+                }
+            }
+        }
+    }
+    //checks if it *should* generate platforms
+    private void checkIfShouldGeneratePlatforms(){
         // removes a platform if it goes below the screen
         boolean makeNewPlatforms = false;
         // used an iterator. normal forEach threw a concurrent modification error
@@ -127,6 +224,8 @@ public class GamePane extends Pane{
                 iterator.remove();
                 this.getChildren().remove(platform);
                 System.out.println("removed a platform");
+                score++;
+                scoreLabel.setText("Score: " + score);
                 //add one platform to ensure the game is playable
                 generatePlatforms(0, false);
                 // if less than 12 platforms, make a new random amount of platforms
@@ -143,21 +242,7 @@ public class GamePane extends Pane{
             player.setYVelocity(player.getYVelocity() + .3);
         }
     }
-    // moves the platforms if need be
-    private void moveScreen(){
-        if(player.getY() - player.getHeight()/2 < this.getScene().getHeight() / 2){
-            double offset = (getScene().getHeight() / 2) - player.getY();
-            //if the offset is positive, adjsutment is needed
-            if(offset > 0){
-                //put the player back below the half way line
-                player.setY(player.getY() + offset);
-                // move the platforms 
-                for (Platform platform : platforms) {
-                    platform.setY(platform.getY() + offset);
-                }
-            }
-        }
-    }
+
     // generates a randomsubset of platforms, potentially with springs
     private void generatePlatforms(int startingPosition, boolean addRandom){
         System.out.println("generating platforms");
