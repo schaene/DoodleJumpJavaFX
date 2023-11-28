@@ -59,6 +59,13 @@ public class Player extends Rectangle{
     public void velocityDo(){
         this.setX(getX() + xVelocity);
         this.setY(getY() + yVelocity);
+
+        // handle the player going off the sides of the screen
+        if((this.getX() + (this.getWidth() / 2)) > GameConstants.GameWidth){
+            this.setX(this.getX() - GameConstants.GameWidth);
+        } else if((this.getX() + (this.getWidth() / 2)) < 0){
+            this.setX(this.getX() + GameConstants.GameWidth);
+        }
     }
 
     

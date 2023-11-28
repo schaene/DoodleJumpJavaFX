@@ -49,9 +49,21 @@ public class Platform extends Rectangle {
     }
 
     // the action to complete when jumped on
-    public void jumpedOn(){
-
+    public void jumpedOn(Player player){
+        // set the player velocity to make them jump
+        player.setYVelocity(this.getJumpVelocity());
     } 
+    // the action to complete when collided with. calls jumpedOn and HeadHit if applicable
+    public void collidedWith(Player player){
+        //limits collision to just feet
+        if(((player.getY() + player.getHeight()) -16 <= this.getY()) && (player.getX() + 40 <= this.getX() + this.getWidth()) && (player.getX() + player.getWidth() - 40 >= this.getX())){
+            //limits collision to if the player is actively falling and the platform is visible
+            if(player.getYVelocity() > 0 && this.isVisible()){
+                // perform the jumped on action
+                this.jumpedOn(player);
+            }
+        }
+    }
 
     private void generateToy(){
         int toyChance = new Random().nextInt(100);

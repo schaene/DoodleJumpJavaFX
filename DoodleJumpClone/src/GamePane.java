@@ -133,83 +133,81 @@ public class GamePane extends Pane{
         // apply the current velocity to the player
         player.velocityDo();
 
-        // handle the player going off the sides of the screen
-        if((player.getX() + (player.getWidth() / 2)) > this.getScene().getWidth()){
-            player.setX(player.getX() - this.getScene().getWidth());
-        } else if((player.getX() + (player.getWidth() / 2)) < 0){
-            player.setX(player.getX() + this.getScene().getWidth());
-        }
-
-        //only do if init'd. game over will stop these
+        //only update these if init'd
         if(init){
             // move platforms down rather than the player if the player is half way up the screen
-            moveScreen();
+            moveScreen(isGameOver);
             // handles the controls and applies whatever they may be
             handleControls();
             //if player is under the map, its game over
             if(player.getY() + player.getHeight() > GameConstants.GameHeight && !isGameOver){
                 gameOver();
             }
-        } else if(isGameOver){
-            // move everything off the screen til the "race over" banner is shown
-            if(player.getY() - player.getHeight() < this.getScene().getHeight() && gameOverRectangle.getY() > 100){
-            double offset = (getScene().getHeight()) - player.getY();
-            //if the offset is positive, adjsutment is needed
-            if(offset < 0){
-                //put the player back below the half way line
-                player.setY(player.getY() + offset);
-                gameOverRectangle.setY(gameOverRectangle.getY() + offset);
-                playAgainButton.setY(playAgainButton.getY() + offset);
-                scoreLabel.setY(scoreLabel.getY() + offset);
-
-                // move the platforms 
-                for (Platform platform : platforms) {
-                    platform.setY(platform.getY() + offset);
-                }
-            }
+        } 
+        // if not inited and game is over, do the following.
+        else if(isGameOver){
+            moveScreen(isGameOver);
         }
-        }
-
+        
+        // check if new platforms should be generated, and if so, generate them.
         checkIfShouldGeneratePlatforms();
         
         // detects collision with platforms and gives the player the velocity for that platform
         playerJump();
-
-        
     }
 
     //do if gameover
     private void gameOver(){
+        // set up the game over label
         scoreLabel = new Text(200, GameConstants.GameHeight + 600, "");
         scoreLabel.setFill(Color.RED);
         scoreLabel.setScaleX(5);
         scoreLabel.setScaleY(5);
         this.getChildren().add(scoreLabel);
-
-        System.out.println("gameover called");
+        // update the high score if its beaten
         if(score > highScore){
             highScore = score;
         }
         scoreLabel.setText("Score: " + score + "\nHigh Score: " + highScore);
+        // uninit the game and set game over to true
         isGameOver = true;
         init = false;
 
     }
 
     // moves the platforms if need be
-    private void moveScreen(){
-        if(player.getY() - player.getHeight()/2 < this.getScene().getHeight() / 2){
-            double offset = (getScene().getHeight() / 2) - player.getY();
-            //if the offset is positive, adjsutment is needed
-            if(offset > 0){
-                //put the player back below the half way line
-                player.setY(player.getY() + offset);
-                // move the platforms 
-                for (Platform platform : platforms) {
-                    platform.setY(platform.getY() + offset);
+    private void moveScreen(Boolean isGameOver){
+        if(!isGameOver){
+            if(player.getY() - player.getHeight()/2 < this.getScene().getHeight() / 2){
+                double offset = (getScene().getHeight() / 2) - player.getY();
+                //if the offset is positive, adjsutment is needed
+                if(offset > 0){
+                    //put the player back below the half way line
+                    player.setY(player.getY() + offset);
+                    // move the platforms 
+                    for (Platform platform : platforms) {
+                        platform.setY(platform.getY() + offset);
+                    }
+                }
+            }
+        }else{
+            // move everything off the screen til the "race over" banner is shown
+            if(player.getY() - player.getHeight() < this.getScene().getHeight() && gameOverRectangle.getY() > 100){
+                double offset = (getScene().getHeight()) - (player.getY() + player.getHeight()*2);
+                //if the offset is negative, move it down
+                if(offset < 0){
+                    //move everything up
+                    player.setY(player.getY() + offset);
+                    gameOverRectangle.setY(gameOverRectangle.getY() + offset);
+                    playAgainButton.setY(playAgainButton.getY() + offset);
+                    scoreLabel.setY(scoreLabel.getY() + offset);
+                    for (Platform platform : platforms) {
+                        platform.setY(platform.getY() + offset);
+                    }
                 }
             }
         }
+        
     }
     //checks if it *should* generate platforms
     private void checkIfShouldGeneratePlatforms(){
@@ -237,7 +235,7 @@ public class GamePane extends Pane{
         //makes the new platforms
         if(makeNewPlatforms)
             generatePlatforms(0, true);
-        
+        // make the player be affected by gravity. mimicks acceleration.
         if(player.getYVelocity() < 10){
             player.setYVelocity(player.getYVelocity() + .3);
         }
@@ -285,7 +283,7 @@ public class GamePane extends Pane{
             this.getChildren().add(platform);
         }
     }
-
+    // converts the controls into smooth movement
     private void handleControls(){
         if(player.getIsControllable()){
             if(gameControls.getButtonStatus()[gameControls.RIGHT] && player.getXVelocity() < 10){
@@ -303,18 +301,11 @@ public class GamePane extends Pane{
 
         }
     }
-    // makes the player jump if landed on something with velocity to give
+    // makes the player interact with the platform it landed on
     private void playerJump(){
         for (Platform platform : platforms) {
             if(player.intersects(platform.getBoundsInLocal())){
-                //limits collision to just feet
-                if(((player.getY() + player.getHeight()) -16 <= platform.getY()) && (player.getX() + 40 <= platform.getX() + platform.getWidth()) && (player.getX() + player.getWidth() - 40 >= platform.getX())){
-                    //limits collision to if the player is actively falling and the platform is visible
-                    if(player.getYVelocity() > 0 && platform.isVisible()){
-                        platform.jumpedOn();
-                        player.setYVelocity(platform.getJumpVelocity());
-                    }
-                }
+                platform.collidedWith(player);
             }
         }
     }

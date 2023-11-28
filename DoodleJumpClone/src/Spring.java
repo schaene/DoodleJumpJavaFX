@@ -20,7 +20,8 @@ public class Spring extends Platform{
 
     // the action to complete when jumped on
     @Override
-    public void jumpedOn(){
+    public void jumpedOn(Player player){
+        player.setYVelocity(this.getJumpVelocity());
         this.setFill(new ImagePattern(new Image("/assets/spring2.png")));
     } 
     
