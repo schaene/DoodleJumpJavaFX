@@ -15,7 +15,7 @@ public class Player extends Rectangle{
         // intantiates to player
         this.xVelocity = 0;
         this.yVelocity = 0;
-        this.image = new Image("/assets/playerLeft.png");
+        this.image = new Image("/assets/playerRight.png");
         this.setX(x);
         this.setY(y);
         this.setWidth(image.getWidth());
@@ -23,7 +23,7 @@ public class Player extends Rectangle{
         // add the image
         this.setFill(new ImagePattern(image));
         // make sure it stays in front
-        this.setViewOrder(-1);
+        this.setViewOrder(-2);
     }
     public void setXVelocity(double xVelocity){
         this.xVelocity = xVelocity;

@@ -5,9 +5,12 @@ import java.util.Random;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
 public class GamePane extends Pane{
@@ -21,6 +24,9 @@ public class GamePane extends Pane{
     private Controls gameControls;
     // add the graphing paper background
     private Image backgroundImage = new Image("/assets/background.png");
+    // stores if the game was init
+    private boolean init = false;
+
     // gamePane constructor
     public GamePane(){
         // set the background
@@ -42,13 +48,48 @@ public class GamePane extends Pane{
         // set the players velocity for the initial jump
         player.setYVelocity(-15);
 
+        // show the title
+        Image title = new Image("/assets/title.png");
+        Rectangle titleRectangle = new Rectangle(title.getWidth(), title.getHeight(), new ImagePattern(title));
+        titleRectangle.setX(75);
+        titleRectangle.setY(175);
+        this.getChildren().add(titleRectangle);
+
+        // show the play button
+        Image playButtonImage = new Image("/assets/playButton.png");
+        Rectangle playButton = new Rectangle(playButtonImage.getWidth(), playButtonImage.getHeight(), new ImagePattern(playButtonImage));
+        playButton.setX(300);
+        playButton.setY(500);
+        this.getChildren().add(playButton);
+
+        // add click event on play button to init the game
+        playButton.setOnMouseClicked(e -> {
+            this.getChildren().clear();
+            this.initGame();
+            
+        });
+        // change color when hovered
+        playButton.setOnMouseEntered(e -> {
+            playButton.setFill(new ImagePattern(new Image("/assets/playHover.png")));
+        });
+        playButton.setOnMouseExited(e -> {
+            playButton.setFill(new ImagePattern(playButtonImage));
+        });
+
     }
 
     // initialize the game by setting the player to controllable
     public void initGame(){
+        player = new Player(GameConstants.GameWidth/ 2, 800);
+        this.getChildren().add(player);
+        //create the starting platform
+        platforms.add(new Platform(GameConstants.GameWidth/ 2, 900, true));
+        // set the players velocity for the initial jump
+        player.setYVelocity(-20);
+        init = true;
         gameControls = new Controls(this.getScene());
         player.setIsControllable(true);
-        generatePlatforms(-10);
+        generatePlatforms(-10, true);
     }
 
     // game update function. calls the needed functions to make the game a game
@@ -64,25 +105,18 @@ public class GamePane extends Pane{
         }
 
         // move platforms down rather than the player if the player is half way up the screen
-        moveScreen();
+        if(init){
+            moveScreen();
+        }
+        
 
         // handles the controls and applies whatever they may be
         handleControls();
         
         // detects collision with platforms and gives the player the velocity for that platform
-        for (Platform platform : platforms) {
-            if(player.intersects(platform.getBoundsInLocal())){
-                //limits collision to just feet
-                if(((player.getY() + player.getHeight()) -10 <= platform.getY()) && (player.getX() + 40 <= platform.getX() + platform.getWidth()) && (player.getX() + player.getWidth() - 40 >= platform.getX())){
-                    //limits collision to if the player is actively falling
-                    if(player.getYVelocity() > 0){
-                        player.setYVelocity(platform.getJumpVelocity());
-                    }
-                }
-            }
-        }
+        playerJump();
 
-        // removes a plaform if it goes below the screen
+        // removes a platform if it goes below the screen
         boolean makeNewPlatforms = false;
         // used an iterator. normal forEach threw a concurrent modification error
         Iterator<Platform> iterator = platforms.iterator(); 
@@ -93,23 +127,23 @@ public class GamePane extends Pane{
                 iterator.remove();
                 this.getChildren().remove(platform);
                 System.out.println("removed a platform");
-
+                //add one platform to ensure the game is playable
+                generatePlatforms(0, false);
+                // if less than 12 platforms, make a new random amount of platforms
                 if (platforms.size() < 12) {
                     makeNewPlatforms = true;
                 }
             }
         }
-
-
-        
+        //makes the new platforms
         if(makeNewPlatforms)
-            generatePlatforms(0);
+            generatePlatforms(0, true);
         
         if(player.getYVelocity() < 10){
             player.setYVelocity(player.getYVelocity() + .3);
         }
     }
-
+    // moves the platforms if need be
     private void moveScreen(){
         if(player.getY() - player.getHeight()/2 < this.getScene().getHeight() / 2){
             double offset = (getScene().getHeight() / 2) - player.getY();
@@ -124,23 +158,36 @@ public class GamePane extends Pane{
             }
         }
     }
-
-    private void generatePlatforms(int startingPosition){
+    // generates a randomsubset of platforms, potentially with springs
+    private void generatePlatforms(int startingPosition, boolean addRandom){
         System.out.println("generating platforms");
-        int numberOfPlatforms = 5 + new Random().nextInt(4);
-        for(int i = startingPosition; i < numberOfPlatforms; i++){
-            int newX = new Random().nextInt(((int)this.getScene().getWidth())) - GameConstants.PlatformWidth;
-            if(newX < 0){
-                newX = 0;
+        if(addRandom){
+            int numberOfPlatforms = 5 + new Random().nextInt(2);
+            for(int i = startingPosition; i < numberOfPlatforms; i++){
+                int newX = new Random().nextInt(((int)this.getScene().getWidth())) - GameConstants.PlatformWidth;
+                if(newX < 0){
+                    newX = 0;
+                }
+                int newY =  (i*-100) - new Random().nextInt(25);
+                int typeOfPlatform = new Random().nextInt(3);
+                System.out.println("type: " + typeOfPlatform);
+                // generate a moving blue platform
+                if(typeOfPlatform == 1){
+                    platforms.add((Platform)new MovingPlatform(newX, newY));
+                // generate a disapearing white platform
+                } else if(typeOfPlatform == 2){
+                    platforms.add((Platform)new DisapearingPlatform(newX, newY));
+                // generate a non-moving green platform
+                }
+                else{
+                    platforms.add(new Platform(newX, newY));
+                }
+                // if the platform has a toy on it, such as a spring, add it to the list as well
+                if(platforms.get(platforms.size() - 1).getToy() != null){
+                    platforms.add(platforms.get(platforms.size() - 1).getToy());
+                }
             }
-            int newY =  (i*-100) - new Random().nextInt(50);
-            int typeOfPlatform = new Random().nextInt(2);
-            System.out.println("type: " + typeOfPlatform);
-            if(typeOfPlatform == 1){
-                platforms.add((Platform)new MovingPlatform(newX, newY));
-            }else{
-                platforms.add(new Platform(newX, newY));
-            }
+        
             
         }
         // remove all the children
@@ -169,6 +216,21 @@ public class GamePane extends Pane{
                 player.setXVelocity(player.getXVelocity() - (player.getXVelocity() / 4));
             }
 
+        }
+    }
+    // makes the player jump if landed on something with velocity to give
+    private void playerJump(){
+        for (Platform platform : platforms) {
+            if(player.intersects(platform.getBoundsInLocal())){
+                //limits collision to just feet
+                if(((player.getY() + player.getHeight()) -16 <= platform.getY()) && (player.getX() + 40 <= platform.getX() + platform.getWidth()) && (player.getX() + player.getWidth() - 40 >= platform.getX())){
+                    //limits collision to if the player is actively falling and the platform is visible
+                    if(player.getYVelocity() > 0 && platform.isVisible()){
+                        platform.jumpedOn();
+                        player.setYVelocity(platform.getJumpVelocity());
+                    }
+                }
+            }
         }
     }
     

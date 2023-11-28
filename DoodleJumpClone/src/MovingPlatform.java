@@ -33,13 +33,19 @@ public class MovingPlatform extends Platform{
         //switch directions if its gone too far
         if(this.getX() <= 0){
             goingLeft = false;
-        } else if(this.getX() + this.getWidth() >= 700){
+        } else if(this.getX() + this.getWidth() >= GameConstants.GameWidth){
             goingLeft = true;
         }
         if(goingLeft){
             this.setX(this.getX() - 1);
+            if(toy != null){
+                toy.setX(toy.getX() - 1);
+            }
         } else{
             this.setX(this.getX() + 1);
+            if(toy != null){
+                toy.setX(toy.getX() + 1);
+            }
         }
     }
     
