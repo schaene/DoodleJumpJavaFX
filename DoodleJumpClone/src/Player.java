@@ -5,12 +5,14 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 
 public class Player extends Rectangle{
+    // the velocities
     private double xVelocity, yVelocity;
-    private boolean isControllable = false;;
-
+    private boolean isControllable = false;
+    // the image of the player
     private Image image;
 
     public Player(double x, double y){
+        // intantiates to player
         this.xVelocity = 0;
         this.yVelocity = 0;
         this.image = new Image("/assets/playerLeft.png");
@@ -18,7 +20,10 @@ public class Player extends Rectangle{
         this.setY(y);
         this.setWidth(image.getWidth());
         this.setHeight(image.getHeight());
+        // add the image
         this.setFill(new ImagePattern(image));
+        // make sure it stays in front
+        this.setViewOrder(-1);
     }
     public void setXVelocity(double xVelocity){
         this.xVelocity = xVelocity;

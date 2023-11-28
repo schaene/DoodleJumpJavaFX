@@ -6,13 +6,8 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 
 public class Platform extends Rectangle {
-    //static final int platformWidth = 200;
-    //static final int platformHeight = 100;
+    //image of the platform
     private Image platformImage;
-
-
-
-
 
     // location of the platform
     double x;
@@ -27,7 +22,6 @@ public class Platform extends Rectangle {
         this.setFill(new ImagePattern(platformImage));
         this.x = x;
         this.y = y;
-        color = Color.GREEN;
         this.setX(x);
         this.setY(y);
         this.setWidth(platformImage.getWidth());
