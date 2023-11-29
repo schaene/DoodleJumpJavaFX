@@ -54,6 +54,7 @@ public class Controls {
                 break;
             case ESCAPE:
                 buttonStatus[ESCAPE] = true;
+                System.exit(0);
                 break;
             default:
                 break;

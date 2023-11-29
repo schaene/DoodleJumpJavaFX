@@ -245,15 +245,16 @@ public class GamePane extends Pane{
                 }
                 iterator.remove();
                 this.getChildren().remove(platform);
-                System.out.println("removed a platform");
+                // update the score
                 score++;
                 scoreLabel.setText("Score: " + score);
-                //add one platform to ensure the game is playable
-                generatePlatforms(0, false);
+                
                 // if less than 12 platforms, make a new random amount of platforms
                 if (platforms.size() < 12) {
                     makeNewPlatforms = true;
                 }
+                //add one platform to ensure the game is playable
+                generatePlatforms(0, false);
             }
         }
         //makes the new platforms
@@ -267,17 +268,15 @@ public class GamePane extends Pane{
 
     // generates a randomsubset of platforms, potentially with toys/items/springs
     private void generatePlatforms(int startingPosition, boolean addRandom){
-        System.out.println("generating platforms");
+        
         if(addRandom){
+            
             int numberOfPlatforms = 5 + new Random().nextInt(2);
+            System.out.println("generating " + numberOfPlatforms + " platforms w/ random");
             for(int i = startingPosition; i < numberOfPlatforms; i++){
-                int newX = new Random().nextInt(((int)this.getScene().getWidth())) - GameConstants.PlatformWidth;
-                if(newX < 0){
-                    newX = 0;
-                }
+                int newX = new Random().nextInt(((int)this.getScene().getWidth() - GameConstants.PlatformWidth)) ;
                 int newY =  (i*-100) - new Random().nextInt(25);
                 int typeOfPlatform = new Random().nextInt(3);
-                System.out.println("type: " + typeOfPlatform);
                 // generate a moving blue platform
                 if(typeOfPlatform == 1){
                     platforms.add((Platform)new MovingPlatform(newX, newY));
@@ -287,6 +286,7 @@ public class GamePane extends Pane{
                 // generate a non-moving green platform
                 }
                 else{
+                    System.out.println("generating the one platform");
                     platforms.add(new Platform(newX, newY));
                 }
             }  
