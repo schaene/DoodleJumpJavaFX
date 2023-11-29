@@ -19,6 +19,10 @@ public class MovingPlatform extends Platform{
         super(x, y);
         // make it blue instead
         this.setFill(new ImagePattern(new Image("/assets/bluePlatform.png")));
+        if(this.getToy() instanceof BreakablePlatform){
+            toy = null;
+        }
+        
 
         //randomly set goingleft
         goingLeft = new Random().nextBoolean();
@@ -30,7 +34,7 @@ public class MovingPlatform extends Platform{
     }
 
     private void moveSides(){
-        //switch directions if its gone too far
+        //switch directions if its gone to the edge
         if(this.getX() <= 0){
             goingLeft = false;
         } else if(this.getX() + this.getWidth() >= GameConstants.GameWidth){

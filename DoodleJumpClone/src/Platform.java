@@ -74,7 +74,10 @@ public class Platform extends Rectangle {
         // Generate a spring 10% chance
         } else if(toyChance <= 75){
             System.out.println("generated spring");
-            toy = new Spring(this.getX() + (new Random().nextInt(GameConstants.PlatformWidth) - GameConstants.springWidth / 2), this.getY() - 50);
+            toy = new Spring(this.getX() + (new Random().nextInt(GameConstants.PlatformWidth - GameConstants.springWidth*2) + GameConstants.springWidth), this.getY() - 50);
+        } else if(toyChance <= 90){
+            System.out.println("generated breakable");
+            toy = new BreakablePlatform(new Random().nextInt(GameConstants.GameWidth) - GameConstants.PlatformWidth, - new Random().nextInt((int)Math.abs(this.getY())), true);
         }
     }
 

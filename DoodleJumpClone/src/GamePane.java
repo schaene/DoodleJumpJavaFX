@@ -44,9 +44,12 @@ public class GamePane extends Pane{
         this.getChildren().add(player);
 
         //create the starting platforms
-        platforms.add(new Platform(50, 900));
+        platforms.add(new Platform(50, 900, true));
         // add all current platforms to the pane
         for (Platform platform : platforms) {
+            if(platform.getToy() != null){
+                this.getChildren().add(platform.getToy());
+            }
             this.getChildren().add(platform);
         }
         // create the timeline and start it, allowing player to have gravity and jump
@@ -89,6 +92,7 @@ public class GamePane extends Pane{
     public void initGame(){
         // clear out the children from whatever was there before (title screen, game over screen, etc)
         this.getChildren().clear();
+        platforms.clear();
         // reset some values
         isGameOver = false;
         score = 0;
@@ -197,6 +201,9 @@ public class GamePane extends Pane{
                     player.setY(player.getY() + offset);
                     // move the platforms 
                     for (Platform platform : platforms) {
+                        if(platform.getToy() != null){
+                            platform.getToy().setY(platform.getToy().getY() + offset);
+                        }
                         platform.setY(platform.getY() + offset);
                     }
                 }
@@ -213,6 +220,9 @@ public class GamePane extends Pane{
                     playAgainButton.setY(playAgainButton.getY() + offset);
                     scoreLabel.setY(scoreLabel.getY() + offset);
                     for (Platform platform : platforms) {
+                        if(platform.getToy() != null){
+                            platform.getToy().setY(platform.getY() + offset);
+                        }
                         platform.setY(platform.getY() + offset);
                     }
                 }
@@ -228,8 +238,11 @@ public class GamePane extends Pane{
         Iterator<Platform> iterator = platforms.iterator(); 
         while (iterator.hasNext()) {
             Platform platform = iterator.next();
-
+            // delete the platforms if below 0
             if (platform.getY() > this.getScene().getHeight()) {
+                if(platform.getToy() != null){
+                    this.getChildren().remove(platform.getToy());
+                }
                 iterator.remove();
                 this.getChildren().remove(platform);
                 System.out.println("removed a platform");
@@ -252,7 +265,7 @@ public class GamePane extends Pane{
         }
     }
 
-    // generates a randomsubset of platforms, potentially with springs
+    // generates a randomsubset of platforms, potentially with toys/items/springs
     private void generatePlatforms(int startingPosition, boolean addRandom){
         System.out.println("generating platforms");
         if(addRandom){
@@ -276,22 +289,23 @@ public class GamePane extends Pane{
                 else{
                     platforms.add(new Platform(newX, newY));
                 }
-                // if the platform has a toy on it, such as a spring, add it to the list as well
-                if(platforms.get(platforms.size() - 1).getToy() != null){
-                    platforms.add(platforms.get(platforms.size() - 1).getToy());
-                }
-            }
-        
-            
+            }  
         }
-        // remove all the children
+        // remove all the children, including toys
         for (Platform platform : platforms) {
+            if(platform.getToy() != null){
+                this.getChildren().remove(platform.getToy());
+            }
             this.getChildren().remove(platform);
         }
 
-        // add all current platforms to the pane
+        // add all current platforms and toys to the pane
         for (Platform platform : platforms) {
             this.getChildren().add(platform);
+            // add the platforms toys to the game
+            if(platform.getToy() != null){
+                this.getChildren().add(platform.getToy());
+            }
         }
     }
     // converts the controls into smooth movement
@@ -309,7 +323,10 @@ public class GamePane extends Pane{
                 //System.out.println("nothing pressed");
                 player.setXVelocity(player.getXVelocity() - (player.getXVelocity() / 4));
             }
-
+            // pressing escape closes the game
+            if(gameControls.getButtonStatus()[gameControls.ESCAPE]){
+                System.exit(0);
+            }
         }
     }
     // makes the player interact with the platform it landed on
@@ -318,7 +335,12 @@ public class GamePane extends Pane{
             if(player.intersects(platform.getBoundsInLocal())){
                 platform.collidedWith(player);
             }
+            // handle the toys
+            if(platform.getToy() != null){
+                if(player.intersects(platform.getToy().getBoundsInLocal())){
+                    platform.getToy().collidedWith(player);
+                }
+            }
         }
-    }
-    
+    } 
 }
