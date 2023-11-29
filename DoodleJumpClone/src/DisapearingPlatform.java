@@ -14,7 +14,7 @@ public class DisapearingPlatform extends Platform{
     // the action to complete when jumped on
     @Override
     public void jumpedOn(Player player){
-        player.setYVelocity(this.getJumpVelocity());
+        super.jumpedOn(player);
         this.setVisible(false);
     } 
     

@@ -1,3 +1,4 @@
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
@@ -39,14 +40,13 @@ public class GamePane extends Pane{
     public GamePane(){
         // set the background
         this.setBackground(new Background(new BackgroundImage(backgroundImage, null, null, null, null)));
-        // create the player and add it to the pane
+        // create the player and platforms and add it to the pane for the title screen
         player = new Player(50, 800);
         this.getChildren().add(player);
-
-        //create the starting platforms
         platforms.add(new Platform(50, 900, true));
         platforms.add(new BlackHolePlatform(450, 750));
-        // add all current platforms to the pane
+
+        // add all current platforms and their children to the pane
         for (Platform platform : platforms) {
             if(platform.getToy() != null){
                 this.getChildren().add(platform.getToy());
@@ -79,7 +79,7 @@ public class GamePane extends Pane{
             this.initGame();
             
         });
-        // change color when hovered
+        // change color of button when hovered/unhovered
         playButton.setOnMouseEntered(e -> {
             playButton.setFill(new ImagePattern(new Image("/assets/playHover.png")));
         });
@@ -103,7 +103,7 @@ public class GamePane extends Pane{
         //create the starting platform
         platforms.add(new Platform(GameConstants.GameWidth/ 2, 900, true));
 
-        // set the players velocity for the initial jump
+        // set the players velocity for the initial jump (a big one. launches the player into the game)
         player.setYVelocity(-30);
 
         //set up game controls
@@ -170,16 +170,27 @@ public class GamePane extends Pane{
         
         // detects collision with platforms and gives the player the velocity for that platform
         playerJump();
+
+        // make the player be affected by gravity. mimicks acceleration.
+        if(player.getYVelocity() < 10){
+            player.setYVelocity(player.getYVelocity() + .3);
+        }
     }
 
     //do if gameover
     private void gameOver(){
+        // play falling sound
+        try {
+            GameConstants.playSound(new File("./src/assets/SFX/fall.wav"));
+        } catch (Exception e){}
+
         // set up the game over label
         scoreLabel = new Text(200, GameConstants.GameHeight + 600, "");
         scoreLabel.setFill(Color.RED);
         scoreLabel.setScaleX(5);
         scoreLabel.setScaleY(5);
         this.getChildren().add(scoreLabel);
+
         // update the high score if its beaten
         if(score > highScore){
             highScore = score;
@@ -193,6 +204,7 @@ public class GamePane extends Pane{
 
     // moves the platforms if need be
     private void moveScreen(Boolean isGameOver){
+        // moves the platforms down during the game
         if(!isGameOver){
             if(player.getY() - player.getHeight()/2 < this.getScene().getHeight() / 2){
                 double offset = (getScene().getHeight() / 2) - player.getY();
@@ -209,13 +221,13 @@ public class GamePane extends Pane{
                     }
                 }
             }
-        }else{
+        } else{ // moves everything up during game over
             // move everything off the screen til the "race over" banner is shown
             if(player.getY() - player.getHeight() < this.getScene().getHeight() && gameOverRectangle.getY() > 100){
                 double offset = (getScene().getHeight()) - (player.getY() + player.getHeight()*2);
                 //if the offset is negative, move it down
                 if(offset < 0){
-                    //move everything up
+                    //move everything up, including game over assets
                     player.setY(player.getY() + offset);
                     gameOverRectangle.setY(gameOverRectangle.getY() + offset);
                     playAgainButton.setY(playAgainButton.getY() + offset);
@@ -231,7 +243,7 @@ public class GamePane extends Pane{
         }
         
     }
-    //checks if it *should* generate platforms
+    //checks if it *should* generate platforms, and generates them if yes
     private void checkIfShouldGeneratePlatforms(){
         // removes a platform if it goes below the screen
         boolean makeNewPlatforms = false;
@@ -258,13 +270,9 @@ public class GamePane extends Pane{
                 generatePlatforms(0, false);
             }
         }
-        //makes the new platforms
+        //makes the new platforms if yes
         if(makeNewPlatforms)
             generatePlatforms(0, true);
-        // make the player be affected by gravity. mimicks acceleration.
-        if(player.getYVelocity() < 10){
-            player.setYVelocity(player.getYVelocity() + .3);
-        }
     }
 
     // generates a randomsubset of platforms, potentially with toys/items/springs

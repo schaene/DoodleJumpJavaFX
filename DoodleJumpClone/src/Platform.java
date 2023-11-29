@@ -1,5 +1,6 @@
 // The basic green platform. other platforms extend this one
 
+import java.io.File;
 import java.util.Random;
 
 import javafx.scene.image.Image;
@@ -10,6 +11,8 @@ import javafx.scene.shape.Rectangle;
 public class Platform extends Rectangle {
     //image of the platform
     protected Image platformImage;
+    // sound it plays when jumped on
+    protected File jumpSound;
 
     // location of the platform
     double x;
@@ -23,8 +26,9 @@ public class Platform extends Rectangle {
     protected Platform toy;
 
     public Platform(double x, double y){
-        // set up the image and rectangle
+        // set up the image and rectangle, and sound
         platformImage = new Image("/assets/greenPlatform.png");
+        jumpSound = new File("./src/assets/SFX/jump.wav");
         this.setFill(new ImagePattern(platformImage));
         this.x = x;
         this.y = y;
@@ -33,7 +37,6 @@ public class Platform extends Rectangle {
         this.setWidth(platformImage.getWidth());
         this.setHeight(platformImage.getHeight());
         generateToy();
-
         // determine if a toy will be added to the platform
     }
 
@@ -52,6 +55,10 @@ public class Platform extends Rectangle {
     public void jumpedOn(Player player){
         // set the player velocity to make them jump
         player.setYVelocity(this.getJumpVelocity());
+        // tries to play the jumped on sound
+        try {
+            GameConstants.playSound(jumpSound);
+        } catch (Exception e){}
     } 
     // the action to complete when collided with. calls jumpedOn and HeadHit if applicable
     public void collidedWith(Player player){

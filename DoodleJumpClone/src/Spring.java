@@ -1,3 +1,5 @@
+import java.io.File;
+
 import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
 
@@ -6,6 +8,7 @@ public class Spring extends Platform{
     public Spring(double x, double y) {
         super(x, y);
         platformImage = new Image("/assets/spring.png");
+        jumpSound = new File("./src/assets/SFX/springshoes.wav");
         this.setFill(new ImagePattern(platformImage));
         this.setWidth(platformImage.getWidth());
         this.setHeight(platformImage.getHeight());
@@ -21,7 +24,7 @@ public class Spring extends Platform{
     // the action to complete when jumped on
     @Override
     public void jumpedOn(Player player){
-        player.setYVelocity(this.getJumpVelocity());
+        super.jumpedOn(player);
         this.setFill(new ImagePattern(new Image("/assets/spring2.png")));
     } 
     

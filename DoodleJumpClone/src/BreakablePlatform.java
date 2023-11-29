@@ -1,3 +1,5 @@
+import java.io.File;
+
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.image.Image;
@@ -15,6 +17,7 @@ public class BreakablePlatform extends Platform{
         super(x, y, noToy);
         // make it broken brown instead
         this.setFill(new ImagePattern(new Image("/assets/breakablePlatform.png")));
+        jumpSound = new File("./src/assets/SFX/break.wav");
 
         // create the timeline but dont start, allows it to fall down the screen
         timeline = new Timeline(new KeyFrame(Duration.millis(15), e -> moveDown()));
@@ -30,7 +33,10 @@ public class BreakablePlatform extends Platform{
     // the action to complete when jumped on
     @Override
     public void jumpedOn(Player player){
-        // doesnt make the player jump. instead just breaks
+        try {
+            GameConstants.playSound(jumpSound);
+        } catch (Exception e){}
+        
         if(!isBroken){
             isBroken = true;
             Image brokenImage = new Image("/assets/brokenPlatform.png");
