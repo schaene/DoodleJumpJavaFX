@@ -72,7 +72,5 @@ public class Player extends Rectangle{
         } else if((this.getX() + (this.getWidth() / 2)) < 0){
             this.setX(this.getX() + GameConstants.GameWidth);
         }
-    }
-
-    
+    } 
 }

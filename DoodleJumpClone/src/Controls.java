@@ -19,19 +19,11 @@ public class Controls {
         // for the key presses
         scene.setOnKeyPressed(e -> handleKeyPress(e.getCode()));
         scene.setOnKeyReleased(e -> handleKeyRelease(e.getCode()));
-
     }
 
     //public getter
     public boolean[] getButtonStatus(){
         return buttonStatus;
-    }
-
-    public int getButtonHeldLength(int i){
-        return buttonHeldLength[i];
-    }
-    public void setButtonHeldLength(int i, int set){
-        buttonHeldLength[i] = set;
     }
 
     // store the keypresses when pressed
