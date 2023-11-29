@@ -45,6 +45,7 @@ public class GamePane extends Pane{
 
         //create the starting platforms
         platforms.add(new Platform(50, 900, true));
+        platforms.add(new BlackHolePlatform(450, 750));
         // add all current platforms to the pane
         for (Platform platform : platforms) {
             if(platform.getToy() != null){
@@ -103,14 +104,14 @@ public class GamePane extends Pane{
         platforms.add(new Platform(GameConstants.GameWidth/ 2, 900, true));
 
         // set the players velocity for the initial jump
-        player.setYVelocity(-20);
+        player.setYVelocity(-30);
 
         //set up game controls
         gameControls = new Controls(this.getScene());
         player.setIsControllable(true);
 
         // generate a bunch of starting platforms
-        generatePlatforms(-10, true);
+        generatePlatforms(-7, true);
 
         // add gameover rectangle
         Image gameOverImage = new Image("/assets/race-over.png");
@@ -270,7 +271,6 @@ public class GamePane extends Pane{
     private void generatePlatforms(int startingPosition, boolean addRandom){
         
         if(addRandom){
-            
             int numberOfPlatforms = 5 + new Random().nextInt(2);
             System.out.println("generating " + numberOfPlatforms + " platforms w/ random");
             for(int i = startingPosition; i < numberOfPlatforms; i++){

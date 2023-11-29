@@ -66,18 +66,21 @@ public class Platform extends Rectangle {
     }
 
     private void generateToy(){
-        int toyChance = new Random().nextInt(100);
+        int toyChance = new Random().nextInt(200);
         System.out.println("toy chance: " + toyChance);
         // dont generate a toy 65% chance
-        if(toyChance <=30){
+        if(toyChance <=60){
             toy = null;
         // Generate a spring 10% chance
-        } else if(toyChance <= 35){
+        } else if(toyChance <= 90){
             System.out.println("generated spring");
             toy = new Spring(this.getX() + (new Random().nextInt(GameConstants.PlatformWidth - GameConstants.springWidth*2) + GameConstants.springWidth), this.getY() - 50);
-        } else if(toyChance <= 60){
+        } else if(toyChance <= 120){
             System.out.println("generated breakable");
             toy = new BreakablePlatform(new Random().nextInt(GameConstants.GameWidth - GameConstants.PlatformWidth), new Random().nextDouble(Math.abs(this.getY()+.1)) * -1, true);
+        } else if(toyChance <= 125){
+            System.out.println("generated black hole");
+            toy = new BlackHolePlatform(new Random().nextInt(GameConstants.GameWidth - GameConstants.PlatformWidth), new Random().nextDouble(Math.abs(this.getY()+.1)) * -1);
         }
     }
 

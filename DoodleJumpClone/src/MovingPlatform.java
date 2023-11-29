@@ -19,7 +19,7 @@ public class MovingPlatform extends Platform{
         super(x, y);
         // make it blue instead
         this.setFill(new ImagePattern(new Image("/assets/bluePlatform.png")));
-        if(this.getToy() instanceof BreakablePlatform){
+        if(this.getToy() instanceof BreakablePlatform || this.getToy() instanceof BlackHolePlatform){
             toy = null;
         }
         

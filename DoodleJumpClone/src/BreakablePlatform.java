@@ -23,7 +23,7 @@ public class BreakablePlatform extends Platform{
 
     private void moveDown(){
         if(isBroken){
-            this.setY(this.getY() + 3);
+            this.setY(this.getY() + 7);
         }
     }
 
