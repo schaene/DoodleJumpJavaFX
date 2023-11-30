@@ -6,7 +6,6 @@ import javafx.scene.input.KeyCode;
 public class Controls {
     // array of buttons being pressed or not pressed
     private boolean[] buttonStatus;
-    private int[] buttonHeldLength;
 
     // easier references for the buttons boolean array
     public final int UP = 0, DOWN = 1, LEFT = 2, RIGHT = 3, ENTER = 4, ESCAPE = 5;
@@ -14,7 +13,6 @@ public class Controls {
     public Controls(Scene scene){
         // make the array
         buttonStatus = new boolean[6];
-        buttonHeldLength = new int[6];
 
         // for the key presses
         scene.setOnKeyPressed(e -> handleKeyPress(e.getCode()));

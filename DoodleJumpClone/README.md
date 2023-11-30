@@ -1,18 +1,20 @@
-## Getting Started
+# Doodle Jump Clone in JavaFX
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+CSCI-3331-002 Assignment
+by: Schaene Trible
+## Design Choices
 
-## Folder Structure
+ - Added Textures early in development so game logic would be tied to the scale of the original game.
+ - Placed exit Icon in top left rather than bottom middle. Game is also able to be exited by pressing the Escape Key.
+ - Rather than stopping all movement upon falling, added functionality for the platforms to rise and bring up a "Game Over" screen.
+ - Implemented springs than can be placed atop regular platforms and moving platforms, rather than just a bouncy platform.
 
-The workspace contains two folders by default, where:
+## Extra Functionality
 
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
+ - Added textures to the player, and changes direction while moving
+ - Added textures to the platforms, some changing when jumped upon.
+ - Added sound effects for jumping on platforms and springs, as well as a falling sound effect.
+ - Added smooth controls through a Controls class.
+ - Added holes in the paper, that when touched, cause a game over.
 
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
-
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
-
-## Dependency Management
-
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+## UML Diagram
