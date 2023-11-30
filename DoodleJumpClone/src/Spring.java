@@ -23,7 +23,7 @@ public class Spring extends Platform{
 
     // the action to complete when jumped on
     @Override
-    public void jumpedOn(Player player){
+    protected void jumpedOn(Player player){
         super.jumpedOn(player);
         this.setFill(new ImagePattern(new Image("/assets/spring2.png")));
     } 

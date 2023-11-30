@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.Random;
 
 import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 
@@ -14,14 +13,6 @@ public class Platform extends Rectangle {
     // sound it plays when jumped on
     protected File jumpSound;
 
-    // location of the platform
-    double x;
-    double y;
-    // color of the platform
-    Color color;
-    // the platform itself
-    //Rectangle rectangle;
-
     //The toy/powerup/spring the platform has
     protected Platform toy;
 
@@ -30,14 +21,11 @@ public class Platform extends Rectangle {
         platformImage = new Image("/assets/greenPlatform.png");
         jumpSound = new File("./src/assets/SFX/jump.wav");
         this.setFill(new ImagePattern(platformImage));
-        this.x = x;
-        this.y = y;
         this.setX(x);
         this.setY(y);
         this.setWidth(platformImage.getWidth());
         this.setHeight(platformImage.getHeight());
         generateToy();
-        // determine if a toy will be added to the platform
     }
 
     public Platform(double x, double y, boolean noToy){
@@ -52,7 +40,7 @@ public class Platform extends Rectangle {
     }
 
     // the action to complete when jumped on
-    public void jumpedOn(Player player){
+    protected void jumpedOn(Player player){
         // set the player velocity to make them jump
         player.setYVelocity(this.getJumpVelocity());
         // tries to play the jumped on sound
