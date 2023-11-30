@@ -10,6 +10,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class App extends Application {
     // Launches the Application
@@ -20,6 +21,7 @@ public class App extends Application {
     // Starts the Magic
     @Override
     public void start(Stage primaryStage) throws Exception {
+        primaryStage.initStyle(StageStyle.UNDECORATED);
         // set the title and icon
         primaryStage.setTitle("Doodle Jump!");
         primaryStage.getIcons().add(new Image("/assets/icon.png"));
