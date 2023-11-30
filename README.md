@@ -16,5 +16,10 @@ by: Schaene Trible
  - Added sound effects for jumping on platforms and springs, as well as a falling sound effect.
  - Added smooth controls through a Controls class.
  - Added holes in the paper, that when touched, cause a game over.
+ - Added breakable platforms. They break and fall when attempting to jump on them.
 
 ## UML Diagram
+![Diagram](/UML_Diagram.png)
+
+## Disclaimer
+Assets and Sounds do not belong to me, and are owned by Lima Sky, the studio behind the original Doodle Jump. 
