@@ -289,7 +289,7 @@ public class GamePane extends Pane{
             for(int i = startingPosition; i < numberOfPlatforms; i++){
                 int newX = new Random().nextInt(((int)this.getScene().getWidth() - GameConstants.PlatformWidth)) ;
                 int newY =  (i*-100) - new Random().nextInt(25);
-                int typeOfPlatform = new Random().nextInt(3);
+                int typeOfPlatform = new Random().nextInt(5);
                 // generate a moving blue platform
                 if(typeOfPlatform == 1){
                     platforms.add((Platform)new MovingPlatform(newX, newY));
