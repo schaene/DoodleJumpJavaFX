@@ -18,6 +18,9 @@ by: Schaene Trible
  - Added holes in the paper, that when touched, cause a game over.
  - Added breakable platforms. They break and fall when attempting to jump on them.
 
+## Bugs
+- I Unintentionally made the game too large, being 1100 pixels in height. This is fine on my display with 100% Display Scaling, but far too large on most. To combat this, I added  ```-Dglass.win.uiScale=100%``` to the vm args. for a screen 1080p or smaller, I'd recommend setting it to 75% or 50%. 100% is fine for anything larger.
+
 ## UML Diagram
 ![Diagram](/UML_Diagram.png)
 
