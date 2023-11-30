@@ -23,7 +23,7 @@ public class BreakablePlatform extends Platform{
         timeline = new Timeline(new KeyFrame(Duration.millis(15), e -> moveDown()));
         timeline.setCycleCount(Timeline.INDEFINITE);
     }
-
+    
     private void moveDown(){
         if(isBroken){
             this.setY(this.getY() + 7);
@@ -36,7 +36,7 @@ public class BreakablePlatform extends Platform{
         try {
             GameConstants.playSound(jumpSound);
         } catch (Exception e){}
-        
+
         if(!isBroken){
             isBroken = true;
             Image brokenImage = new Image("/assets/brokenPlatform.png");

@@ -2,8 +2,11 @@ import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
@@ -23,6 +26,7 @@ public class App extends Application {
         // set up the exit button
         Image exitImage = new Image("/assets/closeButton.png");
         Rectangle exitButton = new Rectangle(50, 50, new ImagePattern(exitImage));
+        exitButton.setViewOrder(-2);
         exitButton.setOnMouseClicked(e -> {
             System.exit(0);
         });
@@ -30,6 +34,8 @@ public class App extends Application {
         //put the exit button in the hbox
         HBox hbox = new HBox(exitButton);
         hbox.setAlignment(Pos.TOP_RIGHT);
+        hbox.setBackground(new Background(new BackgroundFill(Color.BLUE.deriveColor(0, 1, 1, 0.3), null, null)));
+        //hbox.setViewOrder(1);
         //create the gamepane and borderpane
         GamePane myGamePane = new GamePane();
         BorderPane borderPane = new BorderPane();
