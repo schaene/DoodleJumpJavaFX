@@ -27,11 +27,11 @@ public class GamePane extends Pane{
     // add the graphing paper background
     private Image backgroundImage = new Image("/assets/background.png");
     // add stuff for game over screen
-    Rectangle gameOverRectangle;
-    Rectangle playAgainButton;
-    Text scoreLabel;
-    int score;
-    int highScore;
+    private Rectangle gameOverRectangle;
+    private Rectangle playAgainButton;
+    private Text scoreLabel;
+    private int score;
+    private int highScore;
     // stores if the game was init or gameover
     private boolean init = false;
     private boolean isGameOver = false;
