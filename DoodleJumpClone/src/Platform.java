@@ -7,6 +7,11 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 
+/* Schaene Trible
+ * 11/29/2023
+ * CSCI-3331-001
+ */
+
 public class Platform extends Rectangle {
     //image of the platform
     protected Image platformImage;

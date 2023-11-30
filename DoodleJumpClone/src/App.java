@@ -12,6 +12,11 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+/* Schaene Trible
+ * 11/29/2023
+ * CSCI-3331-001
+ */
+
 public class App extends Application {
     // Launches the Application
     public static void main(String[] args) throws Exception {

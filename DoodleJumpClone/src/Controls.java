@@ -3,6 +3,11 @@
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 
+/* Schaene Trible
+ * 11/29/2023
+ * CSCI-3331-001
+ */
+
 public class Controls {
     // array of buttons being pressed or not pressed
     private boolean[] buttonStatus;

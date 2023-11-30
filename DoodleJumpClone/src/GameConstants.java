@@ -4,6 +4,11 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 
+/* Schaene Trible
+ * 11/29/2023
+ * CSCI-3331-001
+ */
+
 public class GameConstants {
     public static final int GameHeight = 1100;
     public static final int GameWidth = 700;

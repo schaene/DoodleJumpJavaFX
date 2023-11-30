@@ -15,6 +15,11 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
+/* Schaene Trible
+ * 11/29/2023
+ * CSCI-3331-001
+ */
+
 public class GamePane extends Pane{
     // the player
     private Player player;

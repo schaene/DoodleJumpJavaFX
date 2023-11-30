@@ -6,6 +6,11 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
 import javafx.util.Duration;
 
+/* Schaene Trible
+ * 11/29/2023
+ * CSCI-3331-001
+ */
+
 public class BreakablePlatform extends Platform{
     // timeline to use when pushing the broken platform off screen
     private Timeline timeline;

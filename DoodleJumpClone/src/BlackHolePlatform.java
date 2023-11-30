@@ -1,6 +1,11 @@
 import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
 
+/* Schaene Trible
+ * 11/29/2023
+ * CSCI-3331-001
+ */
+
 public class BlackHolePlatform extends Platform{
 
     public BlackHolePlatform(double x, double y) {
